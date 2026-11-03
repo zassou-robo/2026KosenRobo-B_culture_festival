@@ -124,16 +124,16 @@ int main(){
                         neopino_out = 0;
                     }
                 }
-                static bool previous_r1 = false;
+                static bool previous_cross = false;
                 static bool reload_limit_reached = false;
-                if (ps5.r1 != previous_r1) {
+                if (ps5.cross != previous_cross) {
                     reload_limit_reached = false;
                 }
-                if (ps5.r1 && neo_r == 0) {
+                if (ps5.cross && neo_r == 0) {
                     reload_limit_reached = true;
                 }
-                neopino_reload_out = ps5.r1 && !reload_limit_reached? neopino_reload_power: 0;
-                previous_r1 = ps5.r1;
+                neopino_reload_out = ps5.cross && !reload_limit_reached? neopino_reload_power: 0;
+                previous_cross = ps5.cross;
                 //膨張率は敵です
             }
         }
