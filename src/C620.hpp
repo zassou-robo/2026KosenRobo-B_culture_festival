@@ -40,9 +40,10 @@ public:
     void read_data()
     {
         CANMessage msg;
-        if (can.read(msg) && 0x201 <= msg.id && msg.id <= 0x208)
-        {
-            data_[msg.id - 0x201].parse(msg.data);
+        while (can.read(msg)) {
+            if (0x201 <= msg.id && msg.id <= 0x208) {
+                data_[msg.id - 0x201].parse(msg.data);
+            }
         }
     }
     /// @brief set output power

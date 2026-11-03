@@ -26,8 +26,12 @@ public:
     {
         float error = goal - actual;
         // printf("error: %f\n", error);
-        _integral += error * dt_sec;
-        float deriv = dt_sec == 0 ? 0 : (error - _pre_error) / dt_sec;
+        if (goal == 0) {
+            _integral = 0;
+        } else {
+            _integral += error * dt_sec;
+        }
+        float deriv = goal == 0 || dt_sec == 0 ? 0 : (error - _pre_error) / dt_sec;
         float output = _parameter.gain.kp * error + _parameter.gain.ki * _integral + _parameter.gain.kd * deriv;
         // printf("param: %f, %f, %f\n", _parameter.gain.kp * error, _parameter.gain.ki * _integral, _parameter.gain.kd * deriv);
         // printf("param: %f\n", _parameter.gain.kp * error + _parameter.gain.ki * _integral + _parameter.gain.kd * deriv);
