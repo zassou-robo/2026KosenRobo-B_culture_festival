@@ -71,6 +71,9 @@ int reload_time = 0;
 //各機構出力初期化
 int neopino_out = 0;
 int neopino_reload_out = 0;
+int arc_out = 0;
+int mi_ud_out = 0;
+int mi_out = 0;
 
 
 int main(){
@@ -84,6 +87,39 @@ int main(){
             }
             pre_option = ps5.option;
             omuni.omuni_calc(ps5.lstick_x,ps5.lstick_y,ps5.rstick_x,bl_goal_rpm,0);
+            if(ps5.r1){
+                arc_out = arc_power;
+                if(arc_u == 0){
+                    arc_out -= arc_power / 2;
+                }
+            }else if(ps5.r2 > 40){
+                arc_out = -arc_power;
+                if(arc_d == 0){
+                    arc_out += arc_power / 2;
+                }
+            }else{
+                arc_out = 0;
+            }
+            if(ps5.l1){
+                mi_ud_out = mi_ud_power;
+            }else if(ps5.r2 > 40){
+                mi_ud_out = -mi_ud_power;
+            }else{
+                mi_ud_out = 0;
+            }
+            if(ps5.right){
+                mi_out = mi_power;
+                if(meI == 0){
+                    mi_out -= mi_power;
+                }
+            }else if(ps5.left){
+                mi_out = -mi_power;
+                if(meI_2 == 0){
+                    mi_out += mi_power;
+                }
+            }else{
+                mi_out = 0;
+            }
             if(robot_mode){
                 roller_signal[1] = 1;
                 roller_signal[0] = 0;
@@ -136,6 +172,12 @@ int main(){
                 previous_cross = ps5.cross;
                 //膨張率は敵です
             }
+            bl_goal_rpm[4] = neopino_out;
+            bl_goal_rpm[5] = neopino_reload_out;
+            bl_goal_rpm[6] = arc_out;
+            bl_goal_rpm[7] = -arc_out;
+            dc_out_one[0] = mi_ud_out;
+            dc_out_one[1] = mi_out;
         }
     }
 }
