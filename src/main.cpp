@@ -51,6 +51,7 @@ constexpr int arc_power = 5000;
 constexpr int neopino_power_h = 8000;
 constexpr int neopino_power_m = 7000;
 constexpr int neopino_power_l = 6000;
+constexpr int neopino_reload_power = 2000;
 constexpr int mi_power = 15000;
 constexpr int mi_ud_power = 5000;
 
@@ -69,6 +70,7 @@ int reload_time = 0;
 
 //各機構出力初期化
 int neopino_out = 0;
+int neopino_reload_out = 0;
 
 
 int main(){
@@ -122,6 +124,17 @@ int main(){
                         neopino_out = 0;
                     }
                 }
+                static bool previous_r1 = false;
+                static bool reload_limit_reached = false;
+                if (ps5.r1 != previous_r1) {
+                    reload_limit_reached = false;
+                }
+                if (ps5.r1 && neo_r == 0) {
+                    reload_limit_reached = true;
+                }
+                neopino_reload_out = ps5.r1 && !reload_limit_reached? neopino_reload_power: 0;
+                previous_r1 = ps5.r1;
+                //膨張率は敵です
             }
         }
     }
